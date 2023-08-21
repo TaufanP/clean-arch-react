@@ -1,31 +1,12 @@
-import { TodoLocalStorageDataSource } from "../../Data/DataSources/Todo/TodoLocalStorageDataSource";
-import { TodoRepositoryImpl } from "../../Data/Repositories/TodoRepositoryImpl";
-import { useFetchTodos } from "../../Domain/UseCases/useFetchTodos";
+import { DependenciesOf, injectComponent } from "react-obsidian";
+import { CounterGraph } from "../../Domain/DependencyInjection/TodoRepoGraph";
 
-export function TodoList() {
-  const { todos, isFetchTodosLoading } = useFetchTodos(
-    new TodoRepositoryImpl(new TodoLocalStorageDataSource())
-  );
+type Props = DependenciesOf<CounterGraph, "useViewModel" | "model">;
 
-  return (
-    <fieldset>
-      <legend>Todo List</legend>
+function _TodoList({ useViewModel, model }: Props) {
+  console.log(model);
 
-      {isFetchTodosLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          {todos?.length === 0 ? (
-            <div>No available Todos.</div>
-          ) : (
-            <ul>
-              {todos?.map((todo) => (
-                <li key={todo.id}>{todo.title}</li>
-              ))}
-            </ul>
-          )}
-        </>
-      )}
-    </fieldset>
-  );
+  return <fieldset />;
 }
+
+export const TodoList = injectComponent(_TodoList, CounterGraph);
